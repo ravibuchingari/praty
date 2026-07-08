@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Operation Save Praty // QA Test Suite: Retention</title>
+<meta name="description" content="A top-secret QA test suite to verify one hypothesis: Praty Poondla cannot be allowed to leave." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="style.css" />
+
+<!-- GSAP: smooth, professional animation timelines -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<!-- canvas-confetti: for the big celebratory bursts -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="grid-overlay"></div>
+
+<!-- Top nav (appears after boot) -->
+<nav class="site-nav hidden" id="site-nav"></nav>
+<div class="progress-hint" id="progress-hint"></div>
+
+<!-- ============================================================ -->
+<!-- SCREEN 0 — BOOT / SYSTEM INTRO                                -->
+<!-- ============================================================ -->
+<section class="screen active fade-in" id="screen-boot" data-title="HQ">
+  <div class="boot-terminal glass-card hud-frame" id="boot-terminal">
+    <span class="corner-tl"></span><span class="corner-tr"></span><span class="corner-bl"></span><span class="corner-br"></span>
+    <div class="eyebrow">QA HEADQUARTERS — SECURE TEST ENVIRONMENT</div>
+    <div id="boot-lines"></div>
+    <div class="boot-bar-track"><div class="boot-bar-fill" id="boot-bar"></div></div>
+    <div class="boot-line" id="boot-status"><span class="boot-cursor"></span></div>
+  </div>
+
+  <div class="dossier glass-card hud-frame" id="dossier" style="display:none;">
+    <span class="corner-tl"></span><span class="corner-tr"></span><span class="corner-bl"></span><span class="corner-br"></span>
+    <div class="eyebrow">Test Subject Found</div>
+    <h2 id="praty-name-click">Praty Poondla</h2>
+    <div class="role">Associate Director · "Chief Believer in People"</div>
+    <div class="dossier-row"><span>Build Status</span><span class="val danger">Attempting To Leave</span></div>
+    <div class="dossier-row"><span>Severity</span><span class="val danger">P0 — CRITICAL</span></div>
+    <div class="dossier-row"><span>Test Objective</span><span class="val warn">Verify: Praty Stays</span></div>
+    <button class="btn btn-primary mt-40" id="begin-investigation-btn" style="margin-top:28px;">Run Test Suite →</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 1 — QUESTION ROUND                                     -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-quiz" data-title="Test Cases">
+  <div class="quiz-card glass-card hud-frame">
+    <span class="corner-tl"></span><span class="corner-tr"></span><span class="corner-bl"></span><span class="corner-br"></span>
+    <div class="quiz-progress" id="quiz-progress">TEST CASE 1 / 3</div>
+    <div class="quiz-question" id="quiz-question">Loading test case…</div>
+    <div class="quiz-options" id="quiz-options"></div>
+    <div class="quiz-feedback" id="quiz-feedback">Assertion Passed.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 2 — FUNNY LOADING SCREEN                                -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-loading" data-title="Regression">
+  <div class="loading-stack">
+    <div class="section-title"><h2>Running Full Regression Suite</h2></div>
+    <div class="load-item">
+      <div class="load-label">test_leadership_quality.spec.js…</div>
+      <div class="load-track"><div class="load-fill" id="load-1"></div></div>
+    </div>
+    <div class="load-item">
+      <div class="load-label">test_coffee_consumption.spec.js…</div>
+      <div class="load-track"><div class="load-fill" id="load-2"></div></div>
+    </div>
+    <div class="load-item">
+      <div class="load-label">test_qa_saves_count.spec.js…</div>
+      <div class="load-track"><div class="load-fill" id="load-3"></div></div>
+    </div>
+    <div class="load-error center-col" id="load-error">
+      <div style="font-size:1.6rem; font-family:var(--font-display);">ASSERTION FAILED</div>
+      <div>expect(bugsPrevented).toBeLessThan(Infinity) — received: Infinity</div>
+      <button class="btn btn-primary mt-40" id="loading-continue-btn">Mark as Known Issue →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 3 — LEAVING PAGE                                        -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-leaving" data-title="P0 Alert">
+  <div class="leaving-warning">⚠ P0 INCIDENT — TEST FAILING: PRATY_LEAVING</div>
+  <h2 class="leaving-title">You are attempting to leave us.</h2>
+  <p class="leaving-sub">Are you sure, you want to?</p>
+  <div class="leaving-buttons">
+    <button class="btn btn-primary" id="stay-btn">❤️ Stay</button>
+    <button class="btn btn-danger-flee" id="leave-btn">💔 Leave</button>
+  </div>
+  <div class="taunt-message" id="taunt-message"></div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 4 — BREAKING NEWS                                       -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-news" data-title="Breaking News">
+  <div class="news-banner">🔴 BREAKING NEWS — QA HEADQUARTERS</div>
+  <div class="news-body">
+    <div class="eyebrow">LIVE</div>
+    <h2 class="news-headline">Our beloved manager <span class="highlight">Praty Poondla</span> has officially been acquired by another company.</h2>
+  </div>
+  <div class="news-ticker-wrap">
+    <div class="news-ticker" id="news-ticker"></div>
+  </div>
+  <div class="news-grid">
+    <div class="news-card glass-card">
+      <h4>TODAY'S FORECAST</h4>
+      <div class="news-stat">☔ 100%</div>
+      <div style="color:var(--white-60); font-size:0.85rem; margin-top:6px;">Chance of Missing Praty</div>
+    </div>
+    <div class="news-card glass-card">
+      <h4>QA HAPPINESS INDEX</h4>
+      <div class="news-stat down">▼ 87%</div>
+    </div>
+    <div class="news-card glass-card">
+      <h4>TEST COVERAGE</h4>
+      <div class="news-stat down">▼ 92%</div>
+    </div>
+    <div class="news-card glass-card">
+      <h4>OPEN DEFECTS</h4>
+      <div class="news-stat down">▲ Infinite</div>
+    </div>
+  </div>
+  <p style="color:var(--white-60); font-family:var(--font-mono); font-size:0.85rem; text-align:center; margin-bottom:26px;">
+    QA analysts confirm: managers like Praty cannot be cloned, mocked, or stubbed out.
+  </p>
+  <button class="btn btn-primary" id="news-continue-btn">Continue →</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 5 — PASS THE CROWN                                      -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-crown" data-title="The Crown">
+  <div class="crown-emoji">👑</div>
+  <div class="crown-search" id="crown-search">Searching for next owner…</div>
+  <div class="crown-award glass-card hud-frame" id="crown-award" style="display:none;">
+    <span class="corner-tl"></span><span class="corner-tr"></span><span class="corner-bl"></span><span class="corner-br"></span>
+    <div class="eyebrow">Team's Favorite Leader — Forever Title Holder</div>
+    <h2 class="title-gradient">Praty Poondla</h2>
+    <div class="crown-titles">
+      <span>Chief Believer in People</span>
+      <span>Builder of Confidence</span>
+      <span>Queen of QA</span>
+      <span>Master of Calm</span>
+    </div>
+    <button class="btn btn-gold mt-40" id="crown-continue-btn" style="margin-top:30px;">Enter the Hall of Fame →</button>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 6 — HALL OF FAME                                        -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-fame" data-title="Hall of Fame">
+  <div class="section-title">
+    <div class="eyebrow">Hall of Fame</div>
+    <h2>Titles Earned in the Field</h2>
+    <p>Hover a card to flip it.</p>
+  </div>
+  <div class="card-grid" id="fame-grid"></div>
+  <button class="btn btn-ghost mt-40" id="fame-continue-btn" style="margin-top:36px;">Next: The Roast →</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 7 — FUN ROAST                                           -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-roast" data-title="Roast">
+  <div class="section-title">
+    <div class="eyebrow">Friendly Fire</div>
+    <h2>The Roast (All Love, Zero Malice)</h2>
+  </div>
+  <div class="card-grid" id="roast-grid"></div>
+  <button class="btn btn-ghost mt-40" id="roast-continue-btn" style="margin-top:36px;">Next: Evidence Log (Photos) →</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 8 — PHOTO GALLERY                                       -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-gallery" data-title="Evidence">
+  <div class="section-title">
+    <div class="eyebrow">Exhibit A — Evidence Log</div>
+    <h2>Moments Worth Keeping</h2>
+  </div>
+  <div class="masonry" id="photo-masonry"></div>
+  <button class="btn btn-ghost mt-40" id="gallery-continue-btn" style="margin-top:30px;">Next: Video Gallery →</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 10 — VIDEO GALLERY                                      -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-videos" data-title="Recordings">
+  <div class="section-title">
+    <div class="eyebrow">Exhibit B — Recorded Testimonies</div>
+    <h2>Moments in Motion</h2>
+  </div>
+  <div class="video-grid" id="video-grid"></div>
+  <button class="btn btn-ghost mt-40" id="videos-continue-btn" style="margin-top:30px;">Next: Final Screen →</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- SCREEN 11 — APPRECIATION WALL                                  -->
+<!-- ============================================================ -->
+<!-- <section class="screen" id="screen-wall" data-title="Test Report">
+  <div class="section-title">
+    <div class="eyebrow">Final Test Report — 100% Pass Rate</div>
+    <h2>Sticky Notes From The Team</h2>
+    <p>Click a note to flip it.</p>
+  </div>
+  <div class="wall-grid" id="wall-grid"></div>
+  <button class="btn btn-ghost mt-40" id="wall-continue-btn" style="margin-top:30px;">Final Page →</button>
+</section> -->
+
+<!-- ============================================================ -->
+<!-- SCREEN 12 — FINAL PAGE                                         -->
+<!-- ============================================================ -->
+<section class="screen" id="screen-final" data-title="Farewell">
+  <div class="final-frame" style="margin-top: 80px; margin-bottom: 50px;">
+    <img src="./photos/Praty.jpg" alt="Praty" style="border-radius: 80px;"/>
+  </div>
+  <div class="final-text" id="final-text"></div>
+  <div class="final-signoff">Thank you, Praty. ❤️</div>
+  <button class="btn btn-gold mt-40" id="final-exit-btn" style="margin-top:36px;">Exit Website</button>
+</section>
+
+<!-- ============================================================ -->
+<!-- OVERLAYS                                                       -->
+<!-- ============================================================ -->
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" id="lightbox-close">&times;</span>
+  <img src="" alt="" id="lightbox-img" />
+</div>
+
+<div class="achievement-toast glass-card hud-frame" id="achievement-toast">
+  <span class="corner-tl"></span><span class="corner-tr"></span><span class="corner-bl"></span><span class="corner-br"></span>
+  <div class="ico" id="ach-icon">🏆</div>
+  <div class="txt"><div class="lbl">Achievement Unlocked</div><div class="name" id="ach-name">Sprint Saver</div></div>
+</div>
+
+<div class="dev-mode-overlay" id="dev-mode-overlay">
+  <div>
+    <div class="eyebrow">⚠ TOP SECRET — DEVELOPER MODE</div>
+    <h2>Praty is Irreplaceable.</h2>
+    <p>You found the Konami code. This file is now classified. Proceed with pride, not permission.</p>
+    <button class="btn btn-ghost" id="dev-mode-close">Close</button>
+  </div>
+</div>
+
+<div class="win-update-overlay" id="win-update-overlay">
+  <div class="spinner"></div>
+  <div style="font-size:1.3rem; font-weight:600;">Installing New Manager…</div>
+  <div class="pct" id="win-update-pct">1%</div>
+</div>
+
+<script>
+  // Reveal nav + progress hint once boot completes (see js/script.js)
+</script>
+
+<!-- App modules (order matters: script.js orchestrates the rest) -->
+<script src="js/gallery.js"></script>
+<script src="js/news.js"></script>
+<script src="js/easter-eggs.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
