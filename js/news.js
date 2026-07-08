@@ -12,6 +12,7 @@ const NEWS_TICKER_ITEMS = [
   "Breaking: replacement manager still 'searching for candidate'.",
 ];
 
+
 const News = {
   init() {
     const ticker = document.getElementById("news-ticker");
