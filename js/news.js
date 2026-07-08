@@ -8,7 +8,7 @@ const NEWS_TICKER_ITEMS = [
   "QA morale expected to decrease.",
   "Bug count expected to increase.",
   "Management currently panicking.",
-  "Sources confirm: nobody explains Jira tickets like her.",
+  "Sources confirm: nobody explains Business Requirements tickets like her.",
   "Breaking: replacement manager still 'searching for candidate'.",
 ];
 
